@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <vector>
 
-struct component
+struct node
 {
-    int node;
-    std::vector<int> connection;
+    int student;
+    std::vector<int> friendship;
 };
 
-void node_parser(int n, component *graph[]);
-void connection_parser(int m, component *graph[]);
+void student_parser(int n, node *graph[]);
+void friendship_parser(int m, node *graph[]);
 
 int main()
 {
@@ -20,28 +20,29 @@ int main()
         return -1;
     }
 
-    component *graph[n+1];
+    node *graph[n+1];
+    int *solution[n+1];
     
-    node_parser(n, graph);
-    connection_parser(m, graph);
+    student_parser(n, graph);
+    friendship_parser(m, graph);
 
     return 0;
 }
 
-void node_parser(int n, component *graph[])
+void student_parser(int n, node *graph[])
 {
     for (int i = 1; i < n+1; i++)
     {
-        scanf("%d", graph[i]->node);
+        scanf("%d", graph[i]->student);
     }
 }
 
-void connection_parser(int m, component *graph[])
+void friendship_parser(int m, node *graph[])
 {
     for (int i = 0; i < m; i++)
     {
         int a, b;
         scanf("%d %d", a, b);
-        graph[a]->connection.push_back(b);
+        graph[a]->friendship.push_back(b);
     } 
 }
