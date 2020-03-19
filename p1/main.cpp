@@ -59,16 +59,16 @@ class Node{
 
 vector<Node*> graph;
 stack<int> discover_tracker;
-int count = 0;
+int visited = 0;
 
 void grades_parser(int n);
 void connections_parser(int m);
-void test(int n);     // testar input -- remover no final
 int min(int a, int b);
 bool max(int a, int b);
 void tarjan(int n);
 void tarjanDFS(int id);
-
+void print_output(int n);
+void test(int n);     // testar input -- remover no final
 
 int main()
 {
@@ -87,11 +87,11 @@ int main()
 
     tarjan(n);
 
+    puts(" ");
     test(n);
 
     return 0;
 }
-
 
 
 void grades_parser(int n)
@@ -106,6 +106,7 @@ void grades_parser(int n)
     }
 }
 
+
 void connections_parser(int m)
 {
     int a, b;
@@ -116,24 +117,11 @@ void connections_parser(int m)
 }
 
 
-//-------------------------------------------------------------------------------------------------
-//  test input
-void test(int n)
-{
-    for (int j = 1; j <= n; j++)
-    {
-    printf("id: %d\t Grade: %d\t\n", graph[j]->get_id(), graph[j]->get_grade());
-    //printf("id: %d\t discover: %d\t\n", graph[j]->get_id(), graph[j]->get_discover());
-    for (int i = 0; i < graph[j]->get_connections().size(); i++) {}
-        //printf("Connections of id %d:  %d\n", graph[j]->get_id(), graph[j]->get_connections()[i]);
-    }
-}
-//-------------------------------------------------------------------------------------------------
-
 int min(int a, int b)
 {
    return (a < b) ? a : b;
 }
+
 
 bool max(int a, int b)
 {
@@ -151,23 +139,24 @@ void tarjan(int n)
 
 }
 
+
 void tarjanDFS(int id)
 {
     discover_tracker.push(id);
     graph[id]->set_onStack(true);
-    graph[id]->set_discover(count);
-    graph[id]->set_low(count);
-    count++;
+    graph[id]->set_discover(visited);
+    graph[id]->set_low(visited);
+    visited++;
     for (int j : graph[id]->get_connections())
     {
         if (graph[j]->get_discover() == -1)
-            tarjanDFS(j);
-        else
         {
-            if (graph[j]->get_onStack())
-            {
-                graph[id]->set_low( min ( graph[id]->get_low(), graph[j]->get_low() ) );
-            }   
+            tarjanDFS(j);
+            graph[id]->set_low( min ( graph[id]->get_low(), graph[j]->get_low() ) );
+        }
+        else if (graph[j]->get_onStack())
+        {
+            graph[id]->set_low( min ( graph[id]->get_low(), graph[j]->get_discover() ) );
         }
     }
 
@@ -183,7 +172,7 @@ void tarjanDFS(int id)
             graph[stack_node]->set_onStack(false);
             graph[stack_node]->set_low( graph[id]->get_discover() );
 
-            if ( graph[stack_node]->get_grade() >= max_grade )
+            if ( graph[stack_node]->get_grade() > max_grade )
             {
                 max_grade = graph[stack_node]->get_grade();
             }
@@ -191,12 +180,12 @@ void tarjanDFS(int id)
 
             if (stack_node == id)
             {
-                //for(int cd: scc)
-                //    printf("scc_node: %d\n", cd);
+                for(int cd: scc)
+                    printf("scc_node: %d\n", cd);
                 break;
             } 
         }
-        //printf("\n");
+        printf("\n");
     }
 
     for (int i : scc) {
@@ -204,3 +193,28 @@ void tarjanDFS(int id)
         graph[i]->set_grade(max_grade);
     }
 }
+
+
+void print_output(int n)
+{
+    for (int i = 1; i <= n; i++)
+    {
+        printf("%d\n", graph[i]->get_grade());
+    }
+}
+
+
+
+//-------------------------------------------------------------------------------------------------
+//  test input
+void test(int n)
+{
+    for (int j = 1; j <= n; j++)
+    {
+    printf("id: %d\t Grade: %d\t\n", graph[j]->get_id(), graph[j]->get_grade());
+    //printf("id: %d\t discover: %d\t\n", graph[j]->get_id(), graph[j]->get_discover());
+    for (int i = 0; i < graph[j]->get_connections().size(); i++) {}
+        //printf("Connections of id %d:  %d\n", graph[j]->get_id(), graph[j]->get_connections()[i]);
+    }
+}
+//-------------------------------------------------------------------------------------------------
