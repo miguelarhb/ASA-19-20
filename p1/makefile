@@ -1,7 +1,10 @@
 make:
 	g++ -std=c++11 -O3 -Wall main.cpp -lm
 
-.PHONY: clean
+.PHONY: clean run
+
+run:
+	./a.out < teste1
 
 clean:
 	rm *.out

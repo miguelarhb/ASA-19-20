@@ -124,8 +124,8 @@ void test(int n)
     {
     printf("id: %d\t Grade: %d\t\n", graph[j]->get_id(), graph[j]->get_grade());
     //printf("id: %d\t discover: %d\t\n", graph[j]->get_id(), graph[j]->get_discover());
-    for (int i = 0; i < graph[j]->get_connections().size(); i++)
-        printf("Connections of id %d:  %d\n", graph[j]->get_id(), graph[j]->get_connections()[i]);
+    for (int i = 0; i < graph[j]->get_connections().size(); i++) {}
+        //printf("Connections of id %d:  %d\n", graph[j]->get_id(), graph[j]->get_connections()[i]);
     }
 }
 //-------------------------------------------------------------------------------------------------
@@ -176,7 +176,7 @@ void tarjanDFS(int id)
 
     if ( graph[id]->get_discover() == graph[id]->get_low() )
     {
-        for (long unsigned int e = 0; e < discover_tracker.size(); e++)
+        for (long unsigned int e = 0; e <= discover_tracker.size(); e++)
         {
             int stack_node = discover_tracker.top();
             discover_tracker.pop();
@@ -188,17 +188,19 @@ void tarjanDFS(int id)
                 max_grade = graph[stack_node]->get_grade();
             }
             scc.push_back( graph[stack_node]->get_id() );          
-            
+
             if (stack_node == id)
             {
+                //for(int cd: scc)
+                //    printf("scc_node: %d\n", cd);
                 break;
             } 
         }
+        //printf("\n");
     }
 
     for (int i : scc) {
+        //printf("max_grade: %d\n", max_grade);
         graph[i]->set_grade(max_grade);
     }
-    scc.clear();
-
 }
