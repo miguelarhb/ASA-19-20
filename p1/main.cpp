@@ -165,9 +165,10 @@ void tarjanDFS(int id)
 
     if ( graph[id]->get_discover() == graph[id]->get_low() )
     {
-        for (long unsigned int e = 0; e <= discover_tracker.size(); e++)
+        while (!discover_tracker.empty())
         {
             int stack_node = discover_tracker.top();
+            printf("%d\n", graph[stack_node]->get_id());
             discover_tracker.pop();
             graph[stack_node]->set_onStack(false);
             graph[stack_node]->set_low( graph[id]->get_discover() );
@@ -180,16 +181,13 @@ void tarjanDFS(int id)
 
             if (stack_node == id)
             {
-                for(int cd: scc)
-                    printf("scc_node: %d\n", cd);
                 break;
             } 
         }
-        printf("\n");
     }
-
-    for (int i : scc) {
-        //printf("max_grade: %d\n", max_grade);
+    
+    for (int i : scc) 
+    {
         graph[i]->set_grade(max_grade);
     }
 }
