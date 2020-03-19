@@ -14,19 +14,21 @@ class Node{
     int _grade;
     bool _onStack;
     int _low;
+    int _finalLow;
     int _discover;
     vector<int> _connections;
     
     public:
         Node() { }
 
-        Node(int id, int grade, bool onStack = false, int low = -1, int discover = -1)
+        Node(int id, int grade, bool onStack = false, int low = -1, int discover = -1, int finalLow = -1)
         {
             _id = id;
             _grade = grade;
             _onStack = onStack;
             _low = low; 
             _discover = discover;
+            _finalLow = finalLow;
         }
 
         int get_id() { return _id; }
@@ -45,6 +47,10 @@ class Node{
         
         void set_low(int low) { _low = low; }
 
+        int get_finalLow() { return _finalLow; }
+
+        void set_finalLow(int finalLow) { _finalLow = finalLow; }
+
         int get_discover() { return _discover; }
         
         void set_discover(int discover) { _discover = discover; }
@@ -55,9 +61,13 @@ class Node{
 
         void add_connection(int id) { _connections.push_back(id); }
 
+        void change_connection(int index, int value) { _connections[index] = value; }
+
 };
 
 vector<Node*> graph;
+vector<Node*> solution_graph;
+int scc_count = 0;
 stack<int> discover_tracker;
 int visited = 0;
 
@@ -170,16 +180,34 @@ void tarjanDFS(int id)
 
             if (stack_node == id)
             {
+                scc_count++;
                 break;
             } 
         }
     }
 
+    /*
+    Node* node = new Node(scc_count, max_grade);
+    node->set_finalLow(graph[id]->get_low());
+    solution_graph.push_back(new Node());
+    solution_graph.push_back(node);
+    */
+    
     for (int i : scc) 
     {
+        /*
+        for (int j : graph[i]->get_connections())
+        {
+            if (graph[i]->get_low() != graph[j]->get_low()) 
+            {         
+                solution_graph[scc_count]->add_connection(graph[j]->get_low());
+            } 
+        }
+        */
         graph[i]->set_grade(max_grade);
     }
 }
+
 
 void print_output(int n)
 {
