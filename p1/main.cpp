@@ -68,7 +68,6 @@ bool max(int a, int b);
 void tarjan(int n);
 void tarjanDFS(int id);
 void print_output(int n);
-void test(int n);     // testar input -- remover no final
 
 int main()
 {
@@ -83,16 +82,12 @@ int main()
     grades_parser(n);
     connections_parser(m);
 
-    test(n);
-
     tarjan(n);
 
-    puts(" ");
-    test(n);
+    print_output(n);
 
     return 0;
 }
-
 
 void grades_parser(int n)
 {
@@ -104,8 +99,7 @@ void grades_parser(int n)
         Node* node = new Node(i, grade);
         graph.push_back(node);
     }
-}
-
+}  
 
 void connections_parser(int m)
 {
@@ -116,18 +110,15 @@ void connections_parser(int m)
     } 
 }
 
-
 int min(int a, int b)
 {
    return (a < b) ? a : b;
 }
 
-
 bool max(int a, int b)
 {
    return (a > b) ? true : false;
 }
-
 
 void tarjan(int n)
 {
@@ -138,7 +129,6 @@ void tarjan(int n)
     }
 
 }
-
 
 void tarjanDFS(int id)
 {
@@ -168,7 +158,6 @@ void tarjanDFS(int id)
         while (!discover_tracker.empty())
         {
             int stack_node = discover_tracker.top();
-            printf("%d\n", graph[stack_node]->get_id());
             discover_tracker.pop();
             graph[stack_node]->set_onStack(false);
             graph[stack_node]->set_low( graph[id]->get_discover() );
@@ -185,13 +174,12 @@ void tarjanDFS(int id)
             } 
         }
     }
-    
+
     for (int i : scc) 
     {
         graph[i]->set_grade(max_grade);
     }
 }
-
 
 void print_output(int n)
 {
@@ -200,19 +188,3 @@ void print_output(int n)
         printf("%d\n", graph[i]->get_grade());
     }
 }
-
-
-
-//-------------------------------------------------------------------------------------------------
-//  test input
-void test(int n)
-{
-    for (int j = 1; j <= n; j++)
-    {
-    printf("id: %d\t Grade: %d\t\n", graph[j]->get_id(), graph[j]->get_grade());
-    //printf("id: %d\t discover: %d\t\n", graph[j]->get_id(), graph[j]->get_discover());
-    for (int i = 0; i < graph[j]->get_connections().size(); i++) {}
-        //printf("Connections of id %d:  %d\n", graph[j]->get_id(), graph[j]->get_connections()[i]);
-    }
-}
-//-------------------------------------------------------------------------------------------------
