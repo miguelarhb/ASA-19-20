@@ -7,6 +7,7 @@ Mariana Chinopa - 92518
 #include <utility>
 #include <vector>
 #include <map>
+#include <iostream>
 
 using namespace std;
 
@@ -44,6 +45,15 @@ class Node {
         bool isFull() { return (_currentCapacity == _maxCapacity); }
 };
 
+void makeGraph();
+void makeNormalNodes(int numNodes);
+void makeTargetNode();
+void makeSourceNode();
+void makeAdjNode(Node* node, int avenue, int street);
+void parseInput();
+int edmondsKarp();
+int bfs();
+
 
 map<int, Node*> graph;
 int m, n, s, c;
@@ -51,8 +61,8 @@ vector<int> adjNode, adjSource, adjTarget;
 
 int main() {
 
-    scanf("%d,%d", &m, &n);
-    scanf("%d,%d", &s, &c);
+    scanf("%d %d", &m, &n);
+    scanf("%d %d", &s, &c);
 
     if (m < 1 || n < 1 || s < 1 || c < 1) {
         printf("error: wrong input\n");
@@ -60,6 +70,8 @@ int main() {
     }
 
     makeGraph();
+
+    printf("%d\n", edmondsKarp());
 
     return 0;
 }
@@ -73,13 +85,15 @@ void makeGraph(){
     makeTargetNode();
 
     makeSourceNode();
+
+    parseInput();
 }
 
 void makeNormalNodes(int numNodes) {
     int nodeId, street, avenue;
-    for(avenue = 1; avenue <= m; avenue++){
-        for(street = 1; street <= n; street++){
-            nodeId = avenue * street;
+    for(street = 1; street <= n; street++){
+        for(avenue = 1; avenue <= m; avenue++){
+            nodeId = m * (street - 1) + avenue;
             Node* node = new Node(nodeId, 0, 1);
             makeAdjNode(node, avenue, street);
             graph.insert( pair<int,Node*>( nodeId, node ) );
@@ -92,14 +106,14 @@ void makeAdjNode(Node* node, int avenue, int street){
     int nodeId = node->getNodeId();
 
     if(street == 1){
-        node->addAdjacency(nodeId + 4);
+        node->addAdjacency(nodeId + m);
     }
     else if(street == n){
-        node->addAdjacency(nodeId - 4);
+        node->addAdjacency(nodeId - m);
     }
     else {
-        node->addAdjacency(nodeId + 4);
-        node->addAdjacency(nodeId - 4);
+        node->addAdjacency(nodeId + m);
+        node->addAdjacency(nodeId - m);
     }
 
     if(avenue == 1){
@@ -124,4 +138,30 @@ void makeTargetNode() {
     int targetID = -1;
     Node* node = new Node(targetID, 0, s);
     graph.insert( pair<int,Node*>( targetID, node ) ); // mega-target
+}
+
+void parseInput(){
+    int i, avenue, street;
+
+    for(i = 0; i < s; i++){
+        scanf("%d %d", &avenue, &street);
+        int nodeId = m * (street - 1) + avenue;
+        graph[-1]->addAdjacency(nodeId);
+        graph[nodeId]->addAdjacency(-1);
+    }
+
+    for(i = 0; i < c; i++){
+        scanf("%d %d", &avenue, &street);
+        int nodeId = m * (street - 1) + avenue;
+        graph[0]->addAdjacency(nodeId);
+        graph[nodeId]->addAdjacency(0);
+    }
+}
+
+int edmondsKarp(){
+
+}
+
+int bfs(){
+
 }
