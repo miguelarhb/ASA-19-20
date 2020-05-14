@@ -174,8 +174,8 @@ int bfs(int startNodeId, int endNodeId)
     while(!q.empty())
     {
         int currentNode = q.front();
-        printf("current node: %d\n", currentNode);
         q.pop();
+        //printf("current node: %d\n", currentNode);
 
         for(int i : graph[currentNode]->getAdjacencies())
         {
@@ -183,11 +183,10 @@ int bfs(int startNodeId, int endNodeId)
             {
                 graph[i]->setParent(currentNode);
                 printf("(if) current node: %d   ----  parent: %d\n", i, currentNode);
-                if(i == endNodeId)
+                if(i == endNodeId) {
                     return 1; //max flow of augmenting path always 1
-                
+                }
                 q.push(i);
-            
             }
         }
     }
@@ -200,7 +199,7 @@ int edmondsKarp(int startNodeId, int endNodeId)
     while(true)
     {
         int flow = bfs(startNodeId, endNodeId);
-        cout << "flow: " << flow << endl; 
+        cout << "HUM" << endl; 
         if (flow == 0)
             break;
         
@@ -211,14 +210,16 @@ int edmondsKarp(int startNodeId, int endNodeId)
             int previousNode = graph[currentNode]->getParent();
 
             int currentNodeCapacity = graph[currentNode]->getCurrentCapacity();
-            int previousNodeCapacity = graph[previousNode]->getCurrentCapacity();
 
             graph[currentNode]->setCurrentCapacity(currentNodeCapacity + 1);
-            graph[previousNode]->setCurrentCapacity(previousNodeCapacity + 1);
 
             currentNode = previousNode;
         }
-
+        
+        for(int i = 1 ; i <= n * m; i++)
+            graph[i]->setParent(-1);
+        graph[0]->setParent(0);
+        graph[-1]->setParent(-1);
     }
     return maxFlow;
 }
